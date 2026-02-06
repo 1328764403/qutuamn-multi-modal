@@ -1,0 +1,76 @@
+# FCMR: same dataset, different task (avoid original paper setup)
+# Task: Difficulty Prediction (Easy/Medium/Hard)
+
+data:
+  source: fcmr
+  data_dir: data/fcmr
+  difficulty: all
+  feature_dim: 768
+  use_pretrained_features: true
+  train_ratio: 0.8
+  val_ratio: 0.1
+  test_ratio: 0.1
+  batch_size: 16
+
+# Task switch (key change)
+task:
+  name: difficulty   # options: original, difficulty, answer_count, confidence, answer_type, anomaly
+
+model:
+  # shared hidden size
+  hidden_dim: 256
+  output_dim: 3
+
+  tfn:
+    hidden_dim: 256
+    dropout: 0.1
+
+  lmf:
+    hidden_dim: 256
+    rank: 8
+    dropout: 0.1
+
+  mfn:
+    hidden_dim: 256
+    memory_size: 16
+    num_layers: 2
+    dropout: 0.1
+
+  mult:
+    d_model: 256
+    num_heads: 8
+    num_layers: 4
+    dropout: 0.1
+
+  gcn:
+    hidden_dim: 256
+    num_layers: 2
+    dropout: 0.1
+
+  hypergraph:
+    hidden_dim: 256
+    num_layers: 2
+    dropout: 0.1
+
+  quantum:
+    hidden_dim: 256
+    n_qubits: 4
+    n_quantum_layers: 2
+    dropout: 0.1
+
+training:
+  epochs: 30
+  learning_rate: 0.0001
+  weight_decay: 0.0001
+  early_stopping_patience: 10
+  save_dir: "results/fcmr_difficulty"
+
+models_to_train:
+  - TFN
+  - LMF
+  - MFN
+  - MulT
+  - GCN
+  - Hypergraph
+  - QuantumHybrid
+

@@ -1,0 +1,89 @@
+# Configuration file for FinMultiTime dataset
+# Paper: FinMultiTime: A Four-Modal Bilingual Dataset for Financial Time-Series Analysis
+# Dataset: https://huggingface.co/datasets/Wenyan0110/Multimodal-Dataset-Image_Text_Table_TimeSeries-for-Financial-Time-Series-Forecasting
+
+# Data settings
+data:
+  source: finmultitime  # 'synthetic', 'finmme', 'finmultitime', or 'fcmr'
+  data_dir: data/finmultitime  # 相对路径，相对于项目根目录
+  market: SP500  # 'SP500' or 'HS300'，根据你的数据文件前缀
+  feature_dim: 768  # 特征维度（BERT/ViT 输出维度）
+  use_pretrained_features: true  # 是否使用预训练模型提取特征
+  
+  # 以下参数在加载 FinMultiTime 数据后会自动更新
+  n_modalities: 4  # 图像(K线图)、文本(新闻)、表格(财务)、时间序列(股价)
+  seq_lengths: [1, 1, 1, 1]  # 每个模态的序列长度
+  feature_dims: [768, 768, 768, 768]  # 每个模态的特征维度
+  output_dim: 1  # 回归任务（预测股价或趋势）
+  
+  train_ratio: 0.8
+  val_ratio: 0.1
+  test_ratio: 0.1
+  batch_size: 16  # 较小的批次大小，因为特征提取较慢
+
+# Model settings
+model:
+  hidden_dim: 256
+  output_dim: 1
+  
+  # TFN settings
+  tfn:
+    hidden_dim: 256
+    dropout: 0.1
+  
+  # LMF settings
+  lmf:
+    hidden_dim: 256
+    rank: 8
+    dropout: 0.1
+  
+  # MFN settings
+  mfn:
+    hidden_dim: 256
+    memory_size: 16
+    num_layers: 2
+    dropout: 0.1
+  
+  # MulT settings
+  mult:
+    d_model: 256
+    num_heads: 8
+    num_layers: 4
+    dropout: 0.1
+  
+  # GCN settings
+  gcn:
+    hidden_dim: 256
+    num_layers: 2
+    dropout: 0.1
+  
+  # Hypergraph settings
+  hypergraph:
+    hidden_dim: 256
+    num_layers: 2
+    dropout: 0.1
+  
+  # Quantum Hybrid settings
+  quantum:
+    hidden_dim: 256
+    n_qubits: 4
+    n_quantum_layers: 2
+    dropout: 0.1
+
+# Training settings
+training:
+  epochs: 50  # FinMultiTime数据量大，可以训练更多轮
+  learning_rate: 0.0001
+  weight_decay: 0.0001
+  early_stopping_patience: 15
+  save_dir: "results/finmultitime"
+
+# Models to train
+models_to_train:
+  - TFN
+  - LMF
+  - MFN
+  - MulT
+  - GCN
+  - Hypergraph
+  - QuantumHybrid

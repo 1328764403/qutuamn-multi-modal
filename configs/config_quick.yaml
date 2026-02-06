@@ -1,0 +1,87 @@
+# Quick test configuration (smaller models, fewer epochs)
+
+# Data settings
+data:
+  n_samples: 500
+  n_modalities: 3
+  seq_lengths: [10, 15, 12]
+  feature_dims: [32, 64, 48]
+  output_dim: 1
+  train_ratio: 0.7
+  val_ratio: 0.15
+  test_ratio: 0.15
+  batch_size: 16
+
+# Model settings
+model:
+  hidden_dim: 64
+  output_dim: 1
+  
+  # TFN settings
+  tfn:
+    hidden_dim: 64
+    dropout: 0.1
+  
+  # LMF settings
+  lmf:
+    hidden_dim: 64
+    rank: 4
+    dropout: 0.1
+  
+  # MFN settings
+  mfn:
+    hidden_dim: 64
+    memory_size: 4
+    num_layers: 1
+    dropout: 0.1
+  
+  # MulT settings
+  mult:
+    d_model: 64
+    num_heads: 4
+    num_layers: 2
+    dropout: 0.1
+  
+  # GCN settings
+  gcn:
+    hidden_dim: 64
+    num_layers: 2
+    dropout: 0.1
+  
+  # Hypergraph settings
+  hypergraph:
+    hidden_dim: 64
+    num_layers: 2
+    dropout: 0.1
+  
+  # Quantum Hybrid settings
+  quantum:
+    hidden_dim: 64
+    n_qubits: 2
+    n_quantum_layers: 1
+    dropout: 0.1
+
+# Training settings
+training:
+  epochs: 20
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  early_stopping_patience: 5
+  save_dir: "results"
+
+# Models to train
+models_to_train:
+  - TFN
+  - LMF
+  - MFN
+  - MulT
+  - GCN
+  - Hypergraph
+  - QuantumHybrid
+
+
+
+
+
+
+

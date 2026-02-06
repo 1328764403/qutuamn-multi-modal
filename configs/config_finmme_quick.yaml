@@ -1,0 +1,86 @@
+# Quick test configuration for FinMME dataset
+
+# Data settings
+data:
+  source: finmme  # 使用真实 FinMME 数据集
+  data_dir: data/finmme
+  feature_dim: 768  # 特征维度（BERT/ViT 输出维度）
+  use_pretrained_features: true  # 是否使用预训练模型提取特征
+  
+  # 以下参数在加载 FinMME 数据后会自动更新
+  n_modalities: 3  # 图像、文本、选项
+  seq_lengths: [1, 1, 1]  # 每个模态的序列长度
+  feature_dims: [768, 768, 768]  # 每个模态的特征维度
+  output_dim: 1  # 回归任务（预测标签）
+  
+  train_ratio: 0.8
+  val_ratio: 0.2
+  test_ratio: 0.0  # FinMME 有独立的 test 集
+  batch_size: 8  # 小批次用于快速测试
+
+# Model settings (smaller models for quick test)
+model:
+  hidden_dim: 64
+  output_dim: 1
+  
+  # TFN settings
+  tfn:
+    hidden_dim: 64
+    dropout: 0.1
+  
+  # LMF settings
+  lmf:
+    hidden_dim: 64
+    rank: 4
+    dropout: 0.1
+  
+  # MFN settings
+  mfn:
+    hidden_dim: 64
+    memory_size: 8
+    num_layers: 1
+    dropout: 0.1
+  
+  # MulT settings
+  mult:
+    d_model: 64
+    num_heads: 4
+    num_layers: 2
+    dropout: 0.1
+  
+  # GCN settings
+  gcn:
+    hidden_dim: 64
+    num_layers: 1
+    dropout: 0.1
+  
+  # Hypergraph settings
+  hypergraph:
+    hidden_dim: 64
+    num_layers: 1
+    dropout: 0.1
+  
+  # Quantum Hybrid settings
+  quantum:
+    hidden_dim: 64
+    n_qubits: 2  # 最小量子比特数用于快速测试
+    n_quantum_layers: 1
+    dropout: 0.1
+
+# Training settings
+training:
+  epochs: 20
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  early_stopping_patience: 5
+  save_dir: "results"
+
+# Models to train
+models_to_train:
+  - TFN
+  - LMF
+  - MFN
+  - MulT
+  - GCN
+  - Hypergraph
+  - QuantumHybrid

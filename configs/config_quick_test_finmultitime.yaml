@@ -1,0 +1,85 @@
+# 快速测试配置 - 使用FinMultiTime数据集（100个真实样本）
+# 用于快速验证代码和模型是否正常工作
+
+# Data settings
+data:
+  source: finmultitime  # 使用真实数据集（FinMultiTime）
+  data_dir: data/finmultitime  # 相对路径，相对于项目根目录
+  market: SP500  # 使用S&P 500数据（如果数据文件带SP500前缀）
+  max_samples: 100  # 限制为100个样本
+  feature_dim: 768  # 特征维度（BERT/ViT 输出维度）
+  use_pretrained_features: true  # 使用预训练模型提取特征
+  
+  # 以下参数在加载数据后会自动更新
+  n_modalities: 4  # 图像、文本、表格、时间序列
+  seq_lengths: [1, 1, 1, 1]  # 每个模态的序列长度
+  feature_dims: [768, 768, 768, 768]  # 每个模态的特征维度
+  output_dim: 1  # 回归任务
+  
+  train_ratio: 0.7
+  val_ratio: 0.15
+  test_ratio: 0.15
+  batch_size: 8  # 小批次
+
+# Model settings - 缩小模型规模
+model:
+  hidden_dim: 64  # 小隐藏层
+  output_dim: 1
+  
+  # TFN settings
+  tfn:
+    hidden_dim: 64
+    dropout: 0.1
+  
+  # LMF settings
+  lmf:
+    hidden_dim: 64
+    rank: 4  # 小rank
+    dropout: 0.1
+  
+  # MFN settings
+  mfn:
+    hidden_dim: 64
+    memory_size: 8  # 小记忆
+    num_layers: 1  # 单层
+    dropout: 0.1
+  
+  # MulT settings
+  mult:
+    d_model: 64
+    num_heads: 2  # 少头数
+    num_layers: 2  # 少层数
+    dropout: 0.1
+  
+  # GCN settings
+  gcn:
+    hidden_dim: 64
+    num_layers: 1
+    dropout: 0.1
+  
+  # Hypergraph settings
+  hypergraph:
+    hidden_dim: 64
+    num_layers: 1
+    dropout: 0.1
+  
+  # Quantum Hybrid settings
+  quantum:
+    hidden_dim: 64
+    n_qubits: 2  # 少量子比特
+    n_quantum_layers: 1  # 单层
+    dropout: 0.1
+
+# Training settings - 快速训练
+training:
+  epochs: 5  # 少轮数
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  early_stopping_patience: 3
+  save_dir: "results/quick_test"
+
+# Models to train - 只训练关键模型
+models_to_train:
+  - TFN
+  - LMF
+  - QuantumHybrid
