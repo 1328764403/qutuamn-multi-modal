@@ -1,0 +1,62 @@
+# FCMR 难度预测 — 小样本快速测试
+# 新设计实验：Difficulty Prediction (Easy/Medium/Hard)，少量样本 + 小模型，几分钟内跑通
+
+data:
+  source: fcmr
+  data_dir: data/fcmr
+  difficulty: all
+  feature_dim: 768
+  use_pretrained_features: true
+  max_samples: 80          # 小样本：train+test 共约 80 条，快速验证管线
+  train_ratio: 0.75
+  batch_size: 8
+
+task:
+  name: difficulty         # 难度预测（3 分类）
+
+model:
+  hidden_dim: 64
+  output_dim: 3
+
+  tfn:
+    hidden_dim: 64
+    dropout: 0.1
+  lmf:
+    hidden_dim: 64
+    rank: 4
+    dropout: 0.1
+  mfn:
+    hidden_dim: 64
+    memory_size: 4
+    num_layers: 1
+    dropout: 0.1
+  mult:
+    d_model: 64
+    num_heads: 4
+    num_layers: 2
+    dropout: 0.1
+  gcn:
+    hidden_dim: 64
+    num_layers: 2
+    dropout: 0.1
+  hypergraph:
+    hidden_dim: 64
+    num_layers: 2
+    dropout: 0.1
+  quantum:
+    hidden_dim: 64
+    n_qubits: 2
+    n_quantum_layers: 1
+    dropout: 0.1
+
+training:
+  epochs: 6
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  early_stopping_patience: 3
+  save_dir: "results/fcmr_difficulty_quick"
+
+models_to_train:
+  - TFN
+  - LMF
+  - QuantumHybrid

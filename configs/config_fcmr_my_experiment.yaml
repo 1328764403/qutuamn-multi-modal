@@ -1,0 +1,105 @@
+# FCMR 自定义任务实验配置
+# 任务：答案类型分类（无答案/单选项/多选项）
+# 目标：和自定义基线模型比较，不和原论文比较
+
+# Data settings
+data:
+  source: fcmr  # 使用FCMR数据集
+  data_dir: data/fcmr
+  difficulty: all  # 使用所有难度级别
+  feature_dim: 768  # BERT/ViT特征维度
+  use_pretrained_features: true  # 使用预训练模型
+
+  # 任务定义（在train.py中通过 --task 参数切换）
+  # 可用任务：
+  #   - original: 原始多标签分类（8维）
+  #   - difficulty: 难度预测（3分类: Easy/Medium/Hard）
+  #   - answer_count: 答案数量预测（4分类: 0-3个答案）
+  #   - confidence: 置信度预测（回归）
+  #   - answer_type: 答案类型分类（3分类: 无/单/多选项）⭐ 当前任务
+  #   - anomaly: 异常检测（二分类）
+
+  n_modalities: 3  # 文本、表格、图表
+  seq_lengths: [1, 1, 1]
+  feature_dims: [768, 768, 768]
+  output_dim: 3  # 3分类任务
+
+  train_ratio: 0.8
+  val_ratio: 0.1
+  test_ratio: 0.1
+  batch_size: 16
+
+# Model settings
+model:
+  hidden_dim: 128  # 减小模型复杂度，加速实验
+  output_dim: 3
+
+  # TFN settings
+  tfn:
+    hidden_dim: 128
+    dropout: 0.2
+
+  # LMF settings
+  lmf:
+    hidden_dim: 128
+    rank: 4
+    dropout: 0.2
+
+  # MFN settings
+  mfn:
+    hidden_dim: 128
+    memory_size: 8
+    num_layers: 2
+    dropout: 0.2
+
+  # MulT settings
+  mult:
+    d_model: 128
+    num_heads: 4
+    num_layers: 2
+    dropout: 0.2
+
+  # GCN settings
+  gcn:
+    hidden_dim: 128
+    num_layers: 2
+    dropout: 0.2
+
+  # Hypergraph settings
+  hypergraph:
+    hidden_dim: 128
+    num_layers: 2
+    dropout: 0.2
+
+  # Quantum Hybrid settings
+  quantum:
+    hidden_dim: 128
+    n_qubits: 4
+    n_quantum_layers: 2
+    dropout: 0.2
+
+# Training settings
+training:
+  epochs: 50
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  early_stopping_patience: 15
+  save_dir: "results/fcmr_answer_type"
+
+# 任务配置
+task:
+  name: "answer_type"  # 切换任务
+  # answer_type: 答案类型分类
+  #   0 = 无答案 (None)
+  #   1 = 单选项 (答案数量=1)
+  #   2 = 多选项 (答案数量>1)
+
+# Models to train - 你的自定义基线
+models_to_train:
+  - TFN          # 张量融合基线
+  - LMF          # 低秩融合基线
+  - MFN          # 记忆融合基线
+  - MulT         # Transformer基线
+  - GCN          # 图卷积基线
+  - Hypergraph   # 超图基线
+  - QuantumHybrid # 量子混合模型 ⭐ 你的创新模型

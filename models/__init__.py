@@ -7,7 +7,7 @@ from .lmf import LMF
 from .mfn import MFN
 from .mult import MulT
 from .graph_baselines import GCNFusion, HypergraphFusion
-from .quantum_hybrid import QuantumHybridModel
+from .quantum_hybrid import QuantumHybridModel, QuantumHybridModelV2
 
 __all__ = [
     'TFN',
@@ -17,6 +17,7 @@ __all__ = [
     'GCNFusion',
     'HypergraphFusion',
     'QuantumHybridModel',
+    'QuantumHybridModelV2',
 ]
 
 
